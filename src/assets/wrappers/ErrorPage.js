@@ -20,8 +20,6 @@ const Wrapper = styled.main`
 		color: var(--grey-500);
 	}
 	a {
-		color: var(--primary-500);
-		text-decoration: underline;
 		text-transform: capitalize;
 	}
 `;

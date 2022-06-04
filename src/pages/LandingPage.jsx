@@ -1,14 +1,15 @@
 import React from 'react';
-import logo from '../images/logo.svg';
-import main from '../images/main.svg';
-import Wrapper from '../wrappers/LandingPage';
 import { Link } from 'react-router-dom';
+import { Logo } from '../components';
+
+import main from '../assets/images/main.svg';
+import Wrapper from '../assets/wrappers/LandingPage';
 
 const LandingPage = () => {
 	return (
 		<Wrapper>
 			<nav>
-				<img src={logo} alt='logo' className='logo' />
+				<Logo />
 			</nav>
 			<div className='container page'>
 				<div className='info'>
@@ -20,7 +21,9 @@ const LandingPage = () => {
 						raclette taxidermy craft beer. Brunch bitters synth, VHS crucifix heirloom
 						meggings bicycle rights.
 					</p>
-					{/* <Link to='/login'>Login/Register</Link> */}
+					<Link to='/register' className='btn btn-hero'>
+						Login/Register
+					</Link>
 				</div>
 				<img src={main} alt='Job Hunt' className='img main-img' />
 			</div>
