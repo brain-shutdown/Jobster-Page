@@ -15,7 +15,7 @@ function App() {
 			</Routes>
 			<ToastContainer
 				position='top-center'
-				autoClose={3000}
+				autoClose={process.env.REACT_APP_TIMEOUT}
 				hideProgressBar={false}
 				newestOnTop={false}
 				closeOnClick

@@ -4,6 +4,7 @@ import { Logo, FormRow } from '../components';
 import { toast } from 'react-toastify';
 import { registerUser, loginUser } from '../features/user/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const initialState = {
 	name: '',
@@ -16,6 +17,15 @@ const Register = () => {
 	const [values, setValues] = useState(initialState);
 	const { isLoading, user } = useSelector((store) => store.user);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	React.useEffect(() => {
+		let timeout;
+		if (user) {
+			timeout = setTimeout(() => navigate('/'), process.env.REACT_APP_TIMEOUT);
+		}
+		return () => clearTimeout(timeout);
+	}, [user, navigate]);
 
 	function handleChange(e) {
 		let name = e.target.name;
@@ -69,11 +79,17 @@ const Register = () => {
 					handleChange={handleChange}
 					autocomplete={values.isMember ? 'current-password' : 'new-password'}
 				/>
-				<button type='submit' className='btn btn-block'>
-					Submit
+				<button type='submit' className='btn btn-block' disabled={isLoading}>
+					{isLoading ? 'Loading...' : 'Submit'}
 				</button>
-				<button type='submit' className='btn btn-block btn-hipster'>
-					Demo App
+				<button
+					type='submit'
+					className='btn btn-block btn-hipster'
+					disabled={isLoading}
+					onClick={() =>
+						dispatch(loginUser({ email: 'testUser@test.com', password: 'secret' }))
+					}>
+					{isLoading ? 'Loading...' : 'Demo App'}
 				</button>
 				<p>
 					{values.isMember ? 'Not a member?' : 'Already a member?'}
