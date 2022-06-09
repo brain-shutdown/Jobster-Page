@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Wrapper from '../assets/wrappers/RegisterPage';
 import { Logo, FormRow } from '../components';
 import { toast } from 'react-toastify';
-import { registerUser, loginUser } from '../features/user/userSlice';
+import { registerUser } from '../features/user/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -41,10 +41,10 @@ const Register = () => {
 			return;
 		}
 		if (isMember) {
-			dispatch(loginUser({ email, password }));
+			dispatch(registerUser({ type: 'login', email, password }));
 			return;
 		}
-		dispatch(registerUser({ name, email, password }));
+		dispatch(registerUser({ type: 'register', name, email, password }));
 	}
 
 	function toggleMember() {
@@ -87,7 +87,13 @@ const Register = () => {
 					className='btn btn-block btn-hipster'
 					disabled={isLoading}
 					onClick={() =>
-						dispatch(loginUser({ email: 'testUser@test.com', password: 'secret' }))
+						dispatch(
+							registerUser({
+								type: 'login',
+								email: 'testUser@test.com',
+								password: 'secret',
+							})
+						)
 					}>
 					{isLoading ? 'Loading...' : 'Demo App'}
 				</button>
