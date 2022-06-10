@@ -22,7 +22,7 @@ const Register = () => {
 	React.useEffect(() => {
 		let timeout;
 		if (user) {
-			timeout = setTimeout(() => navigate('/'), process.env.REACT_APP_TIMEOUT);
+			timeout = setTimeout(() => navigate('/'), 2000);
 		}
 		return () => clearTimeout(timeout);
 	}, [user, navigate]);
