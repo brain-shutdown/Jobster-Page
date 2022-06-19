@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Wrapper = styled.article`
+const Wrapper = styled.form`
 	background: var(--white);
 	border-radius: var(--borderRadius);
 	display: grid;
@@ -18,8 +18,8 @@ const Wrapper = styled.article`
 		}
 	}
 	.main-icon {
-		width: 60px;
-		height: 60px;
+		width: 70px;
+		height: 70px;
 		display: grid;
 		place-items: center;
 		background: var(--primary-500);
@@ -28,15 +28,20 @@ const Wrapper = styled.article`
 		font-weight: 700;
 		text-transform: uppercase;
 		color: var(--white);
-		margin-right: 2rem;
+		margin-right: 1rem;
 	}
 	.info {
-		h5 {
-			margin-bottom: 0.25rem;
-		}
-		p {
-			margin: 0;
+		margin-left: 1rem;
+		display: flex;
+		flex-direction: column;
+		row-gap: 0.5rem;
+		.position {
+			font-size: 1.25rem;
+			margin-bottom: 0.5rem;
 			text-transform: capitalize;
+		}
+		.company {
+			margin: 0;
 			color: var(--grey-400);
 			letter-spacing: var(--letterSpacing);
 		}
@@ -59,11 +64,12 @@ const Wrapper = styled.article`
 	.content-center {
 		display: grid;
 		grid-template-columns: 1fr;
-		row-gap: 0.5rem;
+		align-items: center;
+		gap: 0.5rem;
 		@media (min-width: 576px) {
 			grid-template-columns: 1fr 1fr;
 		}
-		@media (min-width: 992px) {
+		@media (min-width: 840px) {
 			grid-template-columns: 1fr;
 		}
 		@media (min-width: 1120px) {
@@ -71,15 +77,55 @@ const Wrapper = styled.article`
 		}
 	}
 
+	.media {
+		display: flex;
+		align-items: center;
+	}
+
+	.icon {
+		font-size: 1rem;
+		margin-right: 1rem;
+		display: flex;
+		align-items: center;
+		svg {
+			color: var(--grey-400);
+		}
+	}
+	.text {
+		padding: 0.35rem 1rem;
+		width: 100%;
+		border: none;
+		border-radius: var(--borderRadius);
+		background-color: var(--grey-50);
+		text-transform: capitalize;
+		letter-spacing: var(--letterSpacing);
+		color: var(--textColor);
+		height: 30px;
+	}
+
+	.text:disabled,
+	.position:disabled,
+	.company:disabled {
+		outline: none;
+		background-color: #fff;
+		border: none;
+		appearance: none;
+		opacity: 1;
+	}
+
 	.status {
 		border-radius: var(--borderRadius);
 		text-transform: capitalize;
 		letter-spacing: var(--letterSpacing);
 		text-align: center;
-		width: 100px;
-		height: 30px;
-		margin-top: 0.5rem;
+		width: 125px;
+		height: 35px;
 	}
+	.status:disabled {
+		border: none;
+		appearance: none;
+	}
+
 	footer {
 		margin-top: 1rem;
 	}

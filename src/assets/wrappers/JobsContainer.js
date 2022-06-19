@@ -13,7 +13,7 @@ const Wrapper = styled.section`
 		grid-template-columns: 1fr;
 		row-gap: 2rem;
 	}
-	@media (min-width: 992px) {
+	@media (min-width: 840px) {
 		.jobs {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
