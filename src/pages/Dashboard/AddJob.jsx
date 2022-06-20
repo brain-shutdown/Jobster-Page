@@ -15,16 +15,13 @@ const AddJob = () => {
 		status_option,
 		job_type_option,
 		isLoading,
-		isEditing,
 	} = useSelector((store) => store.job);
 	const { user } = useSelector((store) => store.user);
 	const dispatch = useDispatch();
 
 	React.useEffect(() => {
-		if (!isEditing) {
-			dispatch(handleChange({ name: 'job_location', value: user.location }));
-		}
-	}, [isEditing, user.location, dispatch]);
+		dispatch(handleChange({ name: 'job_location', value: user.location }));
+	}, [user.location, dispatch]);
 
 	function handleSubmit(e) {
 		e.preventDefault();
