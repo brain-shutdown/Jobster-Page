@@ -8,8 +8,9 @@ import FormRowSelect from './FormRowSelect';
 import Job from './Job';
 import JobContainer from './JobContainer';
 import SearchContainer from './SearchContainer';
-import JobInfo from './JobInfo';
 import Loading from './Loading';
+import MediaSelect from './MediaSelect';
+import MediaInput from './MediaInput';
 
 export {
 	Logo,
@@ -23,5 +24,6 @@ export {
 	JobContainer,
 	SearchContainer,
 	Loading,
-	JobInfo,
+	MediaSelect,
+	MediaInput,
 };

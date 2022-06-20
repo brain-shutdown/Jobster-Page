@@ -1,59 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Wrapper from '../assets/wrappers/Job';
 import { FaBriefcase, FaCalendarAlt } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import { IoNavigate } from 'react-icons/io5';
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteJob, editJob } from '../features/job/jobSlice';
-import { handleChange, setEditing, cancelEditing } from '../features/job/allJobsSlice';
-import { toast } from 'react-toastify';
+import useJobData from '../hooks/useJobData';
+import { MediaSelect, MediaInput } from './';
 
 const Job = ({ id }) => {
 	const { status_option, job_type_option, isLoading } = useSelector((store) => store.job);
-	const { jobs, jobsEditing } = useSelector((store) => store.allJobs);
-	const job = jobs.filter((job) => job._id === id)[0];
-	const { updatedAt, company, position, jobLocation, jobType, status } = job;
-
-	const [edit, setEdit] = useState(false);
-	const dispatch = useDispatch();
-
-	const updateDate = new Date(updatedAt);
-	const formatUpdateDate = updateDate.toLocaleDateString('en-US', {
-		month: 'short',
-		day: 'numeric',
-		year: 'numeric',
-	});
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		if (!position || !company || !jobLocation) {
-			toast.error('Please fill out all the fields!');
-			return;
-		}
-		const orgJob = jobsEditing.filter((job) => job._id === id)[0];
-
-		for (let key of Object.keys(orgJob)) {
-			if (orgJob[key] !== job[key]) {
-				dispatch(editJob(job));
-				return;
-			}
-		}
-
-		toast.warning('No changes.');
-		dispatch(cancelEditing(id));
-	};
-
-	const handleJobInput = (e) => {
-		const name = e.target.name;
-		const value = e.target.value;
-		dispatch(handleChange({ id, name, value }));
-	};
-
-	useEffect(() => {
-		setEdit(jobsEditing.some((obj) => obj._id === id));
-	}, [jobsEditing, id]);
+	const {
+		handleEditOrSubmission,
+		handleCancelOrDeletion,
+		handleJobInput,
+		date,
+		edit,
+		company,
+		position,
+		jobLocation,
+		jobType,
+		status,
+	} = useJobData(id);
 
 	return (
-		<Wrapper>
+		<Wrapper onSubmit={handleEditOrSubmission}>
 			<header>
 				<div className='main-icon'>{company.charAt(0)}</div>
 				<div className='info'>
@@ -77,51 +46,28 @@ const Job = ({ id }) => {
 			</header>
 			<section className='content'>
 				<div className='content-center'>
-					<div className='media'>
-						<span className='icon'>
-							<IoNavigate />
-						</span>
-						<input
-							type='text'
-							name='jobLocation'
-							className='text'
-							value={jobLocation}
-							onChange={handleJobInput}
-							disabled={!edit}
-						/>
-					</div>
-					<div className='media'>
-						<span className='icon'>
-							<FaCalendarAlt />
-						</span>
-						<input
-							type='text'
-							name='date'
-							className='text'
-							value={formatUpdateDate}
-							disabled
-							onChange={handleJobInput}
-						/>
-					</div>
-					<div className='media'>
-						<span className='icon'>
-							<FaBriefcase />
-						</span>
-						<select
-							name='jobType'
-							className='text'
-							value={jobType}
-							disabled={!edit}
-							onChange={handleJobInput}>
-							{job_type_option.map((option, index) => {
-								return (
-									<option key={index} value={option}>
-										{option}
-									</option>
-								);
-							})}
-						</select>
-					</div>
+					<MediaInput
+						icon={<IoNavigate />}
+						name={'jobLocation'}
+						value={jobLocation}
+						disabled={!edit}
+						handleChange={handleJobInput}
+					/>
+					<MediaInput
+						icon={<FaCalendarAlt />}
+						name={'date'}
+						value={date}
+						disabled={true}
+						handleChange={handleJobInput}
+					/>
+					<MediaSelect
+						icon={<FaBriefcase />}
+						name={'jobType'}
+						value={jobType}
+						disabled={!edit}
+						handleChange={handleJobInput}
+						options={job_type_option}
+					/>
 					<select
 						className={edit ? 'text' : `status ${status}`}
 						type='text'
@@ -140,39 +86,20 @@ const Job = ({ id }) => {
 				</div>
 				<footer>
 					<div className='actions'>
-						{!edit && (
-							<>
-								<button
-									type='button'
-									className='btn edit-btn'
-									onClick={() => dispatch(setEditing({ job }))}>
-									Edit
-								</button>
-								<button
-									className='btn delete-btn'
-									onClick={() => dispatch(deleteJob(id))}>
-									Delete
-								</button>
-							</>
-						)}
-						{edit && (
-							<>
-								<button
-									type='submit'
-									disabled={isLoading}
-									className='btn edit-btn'
-									onClick={handleSubmit}>
-									Submit
-								</button>
-								<button
-									type='button'
-									disabled={isLoading}
-									className='btn delete-btn'
-									onClick={() => dispatch(cancelEditing(id))}>
-									Cancel
-								</button>
-							</>
-						)}
+						<button
+							type={edit ? 'submit' : 'button'}
+							disabled={isLoading}
+							className='btn edit-btn'
+							onClick={handleEditOrSubmission}>
+							{edit ? 'Submit' : 'Edit'}
+						</button>
+						<button
+							type='button'
+							disabled={isLoading}
+							className='btn delete-btn'
+							onClick={handleCancelOrDeletion}>
+							{edit ? 'Cancel' : 'Delete'}
+						</button>
 					</div>
 				</footer>
 			</section>
