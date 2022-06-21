@@ -16,7 +16,7 @@ const initialState = {
 };
 
 export const createJob = createAsyncThunk('/job/createJob', async (job, thunkAPI) => {
-	return createJobThunk('/jobs', job, thunkAPI);
+	return createJobThunk(job, thunkAPI);
 });
 
 export const editJob = createAsyncThunk('/job/editJob', async (job, thunkAPI) => {
