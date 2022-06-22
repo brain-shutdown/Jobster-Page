@@ -9,9 +9,9 @@ const AddJob = () => {
 	const {
 		position,
 		company,
-		job_location,
+		jobLocation,
 		status,
-		job_type,
+		jobType,
 		status_option,
 		job_type_option,
 		isLoading,
@@ -25,11 +25,11 @@ const AddJob = () => {
 
 	function handleSubmit(e) {
 		e.preventDefault();
-		if (!position || !company || !job_location) {
+		if (!position || !company || !jobLocation) {
 			toast.error('Please fill out all the fields!');
 			return;
 		}
-		dispatch(createJob({ position, company, job_location, status, job_type }));
+		dispatch(createJob({ position, company, jobLocation, status, jobType }));
 	}
 	function handleJobInput(e) {
 		const name = e.target.name;
@@ -56,8 +56,8 @@ const AddJob = () => {
 					/>
 					<FormRow
 						type='text'
-						name='job_location'
-						value={job_location}
+						name='jobLocation'
+						value={jobLocation}
 						handleChange={handleJobInput}
 						labelText='Job Location'
 					/>
@@ -68,8 +68,8 @@ const AddJob = () => {
 						handleChange={handleJobInput}
 					/>
 					<FormRowSelect
-						name='job_type'
-						value={job_type}
+						name='jobType'
+						value={jobType}
 						options={job_type_option}
 						handleChange={handleJobInput}
 						labelText='Job Type'

@@ -1,28 +1,27 @@
-import customFetch from '../../utils/axios';
+import customFetch, { checkUnauthorizedResponse } from '../../utils/axios';
 import { showLoading, getAllJobs, hideLoading, clearEditing } from './allJobsSlice';
 import { clear } from './jobSlice';
-import { logoutUser } from '../user/userSlice';
 
-export const deleteJobThunk = async (url, thunkAPI) => {
+export const deleteJobThunk = async (jobID, thunkAPI) => {
 	try {
 		thunkAPI.dispatch(showLoading());
-		const response = await customFetch.delete(url);
+		const response = await customFetch.delete(`/jobs/${jobID}`);
 		thunkAPI.dispatch(getAllJobs());
 		return response.data;
 	} catch (error) {
 		thunkAPI.dispatch(hideLoading());
-		return thunkAPI.rejectWithValue(error.response.data.msg);
+		return checkUnauthorizedResponse(error, thunkAPI);
 	}
 };
 
-export const editJobThunk = async (url, job, thunkAPI) => {
+export const editJobThunk = async (job, thunkAPI) => {
 	try {
-		const response = await customFetch.patch(url, job);
+		const response = await customFetch.patch(`/jobs/${job._id}`, job);
 		thunkAPI.dispatch(clearEditing(job._id));
 		thunkAPI.dispatch(getAllJobs());
 		return response.data;
 	} catch (error) {
-		return thunkAPI.rejectWithValue(error.response.data.msg);
+		return checkUnauthorizedResponse(error, thunkAPI);
 	}
 };
 
@@ -30,12 +29,9 @@ export const createJobThunk = async (job, thunkAPI) => {
 	try {
 		const response = await customFetch.post('/jobs', job);
 		thunkAPI.dispatch(clear());
+		console.log(job, response.data);
 		return response.data;
 	} catch (error) {
-		if (error.response.status === 401) {
-			thunkAPI.dispatch(logoutUser());
-			return thunkAPI.rejectWithValue('Unauthorized! Logging Out...');
-		}
-		return thunkAPI.rejectWithValue(error.response.data.msg);
+		return checkUnauthorizedResponse(error, thunkAPI);
 	}
 };

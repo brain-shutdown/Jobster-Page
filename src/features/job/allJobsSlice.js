@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import customFetch from '../../utils/axios';
+import customFetch, { checkUnauthorizedResponse } from '../../utils/axios';
 
 const initialFilterState = {
 	search: '',
 	searchStatus: 'all',
 	searchType: 'all',
 	sort: 'latest',
-	sortOptions: ['latest', 'oldest', 'A-Z', 'Z-A'],
+	sortOptions: ['latest', 'oldest', 'a-z', 'z-a'],
 };
 
 const initialState = {
@@ -21,11 +21,16 @@ const initialState = {
 };
 
 export const getAllJobs = createAsyncThunk('/allJobs/getAllJobs', async (_, thunkAPI) => {
+	const { search, searchStatus, searchType, sort, page } = thunkAPI.getState().allJobs;
+	let url = `/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}&page=${page}`;
+	if (search) {
+		url += `&search=${search}`;
+	}
 	try {
-		const response = await customFetch.get('/jobs');
+		const response = await customFetch.get(url);
 		return response.data;
 	} catch (error) {
-		return thunkAPI.rejectWithValue(error.response.data.msg);
+		return checkUnauthorizedResponse(error, thunkAPI);
 	}
 });
 
@@ -69,14 +74,31 @@ const allJobsSlice = createSlice({
 			});
 			state.jobsEditing = state.jobsEditing.filter((job) => job._id !== id);
 		},
+		handleSearch: (state, { payload: { name, value } }) => {
+			state.page = 1;
+			state[name] = value;
+		},
+		clearFilters: (state) => {
+			return {
+				...state,
+				...initialFilterState,
+			};
+		},
+		setCurrentPage: (state, { payload }) => {
+			console.log(payload);
+			state.page = payload;
+		},
+		clearAllJobsState: () => initialState,
 	},
 	extraReducers: {
 		[getAllJobs.pending]: (state) => {
 			state.isLoading = true;
 		},
-		[getAllJobs.fulfilled]: (state, { payload: { jobs } }) => {
+		[getAllJobs.fulfilled]: (state, { payload: { jobs, numOfPages, totalJobs } }) => {
 			state.isLoading = false;
 			state.jobs = jobs;
+			state.numPages = numOfPages;
+			state.totalJobs = totalJobs;
 		},
 		[getAllJobs.rejected]: (state, { payload }) => {
 			state.isLoading = false;
@@ -85,6 +107,16 @@ const allJobsSlice = createSlice({
 	},
 });
 
-export const { showLoading, hideLoading, handleChange, setEditing, clearEditing, cancelEditing } =
-	allJobsSlice.actions;
+export const {
+	showLoading,
+	hideLoading,
+	handleChange,
+	setEditing,
+	clearEditing,
+	cancelEditing,
+	handleSearch,
+	clearFilters,
+	setCurrentPage,
+	clearAllJobsState,
+} = allJobsSlice.actions;
 export default allJobsSlice.reducer;

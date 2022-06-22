@@ -11,6 +11,7 @@ import SearchContainer from './SearchContainer';
 import Loading from './Loading';
 import MediaSelect from './MediaSelect';
 import MediaInput from './MediaInput';
+import PageBtnContainer from './PageBtnContainer';
 
 export {
 	Logo,
@@ -26,4 +27,5 @@ export {
 	Loading,
 	MediaSelect,
 	MediaInput,
+	PageBtnContainer,
 };

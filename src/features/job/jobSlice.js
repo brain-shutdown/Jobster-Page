@@ -8,24 +8,18 @@ const initialState = {
 	isLoading: false,
 	position: '',
 	company: '',
-	job_location: getUserFromLocalStorage()?.location || '',
+	jobLocation: getUserFromLocalStorage()?.location || '',
 	status: 'pending',
-	job_type: 'full-time',
+	jobType: 'full-time',
 	status_option: ['interview', 'declined', 'pending'],
 	job_type_option: ['full-time', 'part-time', 'remote', 'internship'],
 };
 
-export const createJob = createAsyncThunk('/job/createJob', async (job, thunkAPI) => {
-	return createJobThunk(job, thunkAPI);
-});
+export const createJob = createAsyncThunk('/job/createJob', createJobThunk);
 
-export const editJob = createAsyncThunk('/job/editJob', async (job, thunkAPI) => {
-	return editJobThunk(`/jobs/${job._id}`, job, thunkAPI);
-});
+export const editJob = createAsyncThunk('/job/editJob', editJobThunk);
 
-export const deleteJob = createAsyncThunk('/job/deleteJob', async (jobID, thunkAPI) => {
-	return deleteJobThunk(`/jobs/${jobID}`, thunkAPI);
-});
+export const deleteJob = createAsyncThunk('/job/deleteJob', deleteJobThunk);
 
 const jobSlice = createSlice({
 	name: 'job',
