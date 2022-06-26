@@ -12,7 +12,7 @@ const SearchContainer = () => {
 	const dispatch = useDispatch();
 
 	const handleChange = (e) => {
-		if (isLoading) return;
+		// if (isLoading) return;
 		const name = e.target.name;
 		const value = e.target.value;
 		dispatch(handleSearch({ name, value }));

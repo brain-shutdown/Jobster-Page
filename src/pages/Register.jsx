@@ -20,12 +20,10 @@ const Register = () => {
 	const navigate = useNavigate();
 
 	React.useEffect(() => {
-		let timeout;
-		if (user) {
-			timeout = setTimeout(() => navigate('/'), 2000);
+		if (user && !isLoading) {
+			navigate('/');
 		}
-		return () => clearTimeout(timeout);
-	}, [user, navigate]);
+	}, [user, navigate, isLoading]);
 
 	function handleChange(e) {
 		let name = e.target.name;

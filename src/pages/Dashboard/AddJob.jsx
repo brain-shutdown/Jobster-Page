@@ -20,7 +20,7 @@ const AddJob = () => {
 	const dispatch = useDispatch();
 
 	React.useEffect(() => {
-		dispatch(handleChange({ name: 'job_location', value: user.location }));
+		dispatch(handleChange({ name: 'jobLocation', value: user.location }));
 	}, [user.location, dispatch]);
 
 	function handleSubmit(e) {

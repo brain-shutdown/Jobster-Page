@@ -10,9 +10,13 @@ const JobContainer = () => {
 	const dispatch = useDispatch();
 
 	React.useEffect(() => {
+		dispatch(getAllJobs());
+	}, [dispatch, page, sort, searchStatus, searchType]);
+
+	React.useEffect(() => {
 		const timeout = setTimeout(() => dispatch(getAllJobs()), 300);
 		return () => clearTimeout(timeout);
-	}, [dispatch, page, sort, searchStatus, searchType, search]);
+	}, [dispatch, search]);
 
 	if (isLoading) {
 		return (

@@ -85,7 +85,6 @@ const allJobsSlice = createSlice({
 			};
 		},
 		setCurrentPage: (state, { payload }) => {
-			console.log(payload);
 			state.page = payload;
 		},
 		clearAllJobsState: () => initialState,
