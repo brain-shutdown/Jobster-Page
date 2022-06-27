@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import customFetch, { checkUnauthorizedResponse } from '../../utils/axios';
+import { getAllJobsThunk, showStatsThunk } from './allJobsThunk';
 
 const initialFilterState = {
 	search: '',
@@ -22,28 +22,9 @@ const initialState = {
 	...initialFilterState,
 };
 
-export const getAllJobs = createAsyncThunk('jobs/getAllJobs', async (_, thunkAPI) => {
-	const { search, searchStatus, searchType, sort, page } = thunkAPI.getState().allJobs;
-	let url = `/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}&page=${page}`;
-	if (search) {
-		url += `&search=${search}`;
-	}
-	try {
-		const response = await customFetch.get(url);
-		return response.data;
-	} catch (error) {
-		return checkUnauthorizedResponse(error, thunkAPI);
-	}
-});
+export const getAllJobs = createAsyncThunk('jobs/getAllJobs', getAllJobsThunk);
 
-export const showStats = createAsyncThunk('jobs/showStats', async (_, thunkAPI) => {
-	try {
-		const response = await customFetch.get('/jobs/stats');
-		return response.data;
-	} catch (error) {
-		return checkUnauthorizedResponse(error, thunkAPI);
-	}
-});
+export const showStats = createAsyncThunk('jobs/showStats', showStatsThunk);
 
 const allJobsSlice = createSlice({
 	name: 'allJobs',
