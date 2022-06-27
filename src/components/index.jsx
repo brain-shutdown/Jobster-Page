@@ -12,6 +12,11 @@ import Loading from './Loading';
 import MediaSelect from './MediaSelect';
 import MediaInput from './MediaInput';
 import PageBtnContainer from './PageBtnContainer';
+import ChartsContainer from './ChartsContainer';
+import StatsContainer from './StatsContainer';
+import StatItem from './StatItem';
+import BarChart from './BarChart';
+import AreaChart from './AreaChart';
 
 export {
 	Logo,
@@ -28,4 +33,9 @@ export {
 	MediaSelect,
 	MediaInput,
 	PageBtnContainer,
+	ChartsContainer,
+	StatsContainer,
+	StatItem,
+	AreaChart,
+	BarChart,
 };

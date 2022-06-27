@@ -17,10 +17,12 @@ const initialState = {
 	totalJobs: 0,
 	numPages: 1,
 	page: 1,
+	stats: {},
+	monthlyApplications: [],
 	...initialFilterState,
 };
 
-export const getAllJobs = createAsyncThunk('/allJobs/getAllJobs', async (_, thunkAPI) => {
+export const getAllJobs = createAsyncThunk('jobs/getAllJobs', async (_, thunkAPI) => {
 	const { search, searchStatus, searchType, sort, page } = thunkAPI.getState().allJobs;
 	let url = `/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}&page=${page}`;
 	if (search) {
@@ -28,6 +30,15 @@ export const getAllJobs = createAsyncThunk('/allJobs/getAllJobs', async (_, thun
 	}
 	try {
 		const response = await customFetch.get(url);
+		return response.data;
+	} catch (error) {
+		return checkUnauthorizedResponse(error, thunkAPI);
+	}
+});
+
+export const showStats = createAsyncThunk('jobs/showStats', async (_, thunkAPI) => {
+	try {
+		const response = await customFetch.get('/jobs/stats');
 		return response.data;
 	} catch (error) {
 		return checkUnauthorizedResponse(error, thunkAPI);
@@ -100,6 +111,18 @@ const allJobsSlice = createSlice({
 			state.totalJobs = totalJobs;
 		},
 		[getAllJobs.rejected]: (state, { payload }) => {
+			state.isLoading = false;
+			toast.error(payload);
+		},
+		[showStats.pending]: (state) => {
+			state.isLoading = true;
+		},
+		[showStats.fulfilled]: (state, { payload: { monthlyApplications, defaultStats } }) => {
+			state.isLoading = false;
+			state.stats = defaultStats;
+			state.monthlyApplications = monthlyApplications;
+		},
+		[showStats.rejected]: (state, { payload }) => {
 			state.isLoading = false;
 			toast.error(payload);
 		},
